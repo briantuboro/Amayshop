@@ -1,10 +1,12 @@
 package com.shoppingcartexercise.program;
 
+import java.math.BigDecimal;
+
 public class Product {
 	
 	private String productCode;
 	private String productName;
-	private double price;
+	private BigDecimal price;
 	
 	public String getProductCode() {
 		return productCode;
@@ -18,10 +20,10 @@ public class Product {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 }
