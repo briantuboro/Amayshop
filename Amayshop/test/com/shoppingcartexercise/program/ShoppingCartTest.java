@@ -48,6 +48,18 @@ public class ShoppingCartTest {
 	@Test
 	public void testTotalAmountOfProductPrice() {
 		
+		ShoppingCart shoppingCart = new ShoppingCart();
+		
+		Product productSmall = productBuilder("ult_small", "Unlimited 1GB", new BigDecimal(24.90));
+		Product productMedium = productBuilder("ult_medium", "Unlimited 2GB", new BigDecimal(29.90));
+		
+		shoppingCart.addToCart(productSmall);
+		shoppingCart.addToCart(productMedium);
+		
+		BigDecimal totalPrice = shoppingCart.totalPrice(shoppingCart.getProducts());
+		
+		assertEquals(new BigDecimal(54.80).setScale(2, BigDecimal.ROUND_HALF_UP), totalPrice);
+		
 	}
 	
 	private Product productBuilder(String productCode, String productName, BigDecimal price) {
