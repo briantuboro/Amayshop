@@ -38,5 +38,17 @@ public class ShoppingCart {
 		return count;
 	}
 
+	public String itemDetails(ShoppingCart shoppingCart, String productCode) {
+		String itemDetails = null;
+		
+		for (Product product : shoppingCart.getProducts()) {
+			if (productCode != null && productCode.equals(product.getProductCode())) {
+				itemDetails = getItemsCount(shoppingCart, product.getProductCode()) + " " + product.getProductName();
+			}
+		}
+		
+		return itemDetails;
+
+	}
 
 }
