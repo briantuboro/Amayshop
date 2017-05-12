@@ -43,7 +43,7 @@ public class ShoppingCart {
 		
 		for (Product product : shoppingCart.getProducts()) {
 			if (productCode != null && productCode.equals(product.getProductCode())) {
-				itemDetails = getItemsCount(shoppingCart, product.getProductCode()) + " " + product.getProductName();
+				itemDetails = getItemsCount(shoppingCart, productCode) + " " + product.getProductName();
 			}
 		}
 		
