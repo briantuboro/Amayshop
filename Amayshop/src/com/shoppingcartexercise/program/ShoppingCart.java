@@ -28,4 +28,15 @@ public class ShoppingCart {
 		return price;
 	}
 
+	public int getItemsCount(ShoppingCart shoppingCart, String productCode) {
+		int count = 0;
+		for (Product product : shoppingCart.getProducts()) {
+			if (productCode.equals(product.getProductCode())) {
+				count = ++count;
+			}
+		}
+		return count;
+	}
+
+
 }

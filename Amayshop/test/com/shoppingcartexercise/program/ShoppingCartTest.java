@@ -62,6 +62,22 @@ public class ShoppingCartTest {
 		
 	}
 	
+	@Test
+	public void testGetItemsCount() {
+		ShoppingCart shoppingCart = new ShoppingCart();
+		
+		Product productSmall = productBuilder("ult_small", "Unlimited 1GB", new BigDecimal(24.90));
+		Product productMedium = productBuilder("ult_medium", "Unlimited 2GB", new BigDecimal(29.90));
+		Product productMedium1 = productBuilder("ult_medium", "Unlimited 2GB", new BigDecimal(29.90));
+		
+		shoppingCart.addToCart(productSmall);
+		shoppingCart.addToCart(productMedium);
+		shoppingCart.addToCart(productMedium1);
+		
+		assertEquals(1, shoppingCart.getItemsCount(shoppingCart, "ult_small"));
+		assertEquals(2, shoppingCart.getItemsCount(shoppingCart, "ult_medium"));
+	}
+	
 	private Product productBuilder(String productCode, String productName, BigDecimal price) {
 		Product item = new Product();
 		
