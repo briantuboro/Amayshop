@@ -11,6 +11,7 @@ public class ShoppingCart {
 	private List<Product> products = new ArrayList<>();
 	private BigDecimal productTotalPrice;
 	private Map<String, String> selectedProductDetails = new HashMap<>();
+	private String promoCode;
 
 	public List<Product> getProducts() {
 		return products;
@@ -30,6 +31,14 @@ public class ShoppingCart {
 	
 	public void setProductTotalPrice(BigDecimal productTotalPrice) {
 		this.productTotalPrice = productTotalPrice;
+	}
+
+	public String getPromoCode() {
+		return promoCode;
+	}
+
+	public void setPromoCode(String promoCode) {
+		this.promoCode = promoCode;
 	}
 
 	public List<Product> addToCart(Product item) {
@@ -74,55 +83,8 @@ public class ShoppingCart {
 
 	}
 
-	public ShoppingCart shop(List<Product> products, String discount) {
-		ShoppingCart shoppingCart = new ShoppingCart();
-		String productSmallCode = "ult_small";
-		String productMediumCode = "ult_medium";
-		String productLargeCode = "ult_large";
-		int smallItemsCount = getItemsCount(products, productSmallCode);
-		int largeItemsCount = getItemsCount(products, productLargeCode);
-		int mediumItemsCount = getItemsCount(products, productMediumCode);
-		String productOneGbCode = "1gb";
-		String productOneGbName = "1GB Data-pack";
-		String promoCode = "|<3AMAYSIM";
-
-		for (Product product : products) {
-			if (smallItemsCount == 3) {
-				BigDecimal totalPrice = totalPrice(products);
-				shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice()));
-				break;
-			} else if (largeItemsCount > 3) {
-				for (Product largeProduct : products) {
-					if (productLargeCode.equals(largeProduct.getProductCode())) {
-						largeProduct.setPrice(new BigDecimal(39.90));
-					}
-				}
-				shoppingCart.setProductTotalPrice(totalPrice(products));
-				break;
-			} else {
-				for (int i = 0; i < mediumItemsCount; i++) {
-					Product oneGbProduct = new Product(productOneGbCode, productOneGbName, null);
-					products.add(oneGbProduct);
-				}
-				
-				BigDecimal grandTotalPrice = totalPrice(products);
-				
-				grandTotalPrice = applyDiscount(discount, promoCode, grandTotalPrice);
-				
-				shoppingCart.setProductTotalPrice(grandTotalPrice);
-				break;
-			}
-		}
-		
-		Map<String, String> itemDetails = this.itemDetails(products);
-		
-		shoppingCart.setSelectedProductDetails(itemDetails);
-		
-		return shoppingCart;
-	}
-
-	private BigDecimal applyDiscount(String discount, String promoCode, BigDecimal grandTotalPrice) {
-		if (discount != null && promoCode.equals(discount)) {
+	protected BigDecimal applyDiscount(String promoCode, BigDecimal grandTotalPrice) {
+		if (promoCode != null && promoCode.equals(promoCode)) {
 			BigDecimal discountedPrice = grandTotalPrice.multiply(new BigDecimal(.10));
 			
 			grandTotalPrice = grandTotalPrice.subtract(discountedPrice);
