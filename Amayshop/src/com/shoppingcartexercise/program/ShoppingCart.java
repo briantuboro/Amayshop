@@ -2,15 +2,45 @@ package com.shoppingcartexercise.program;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShoppingCart {
 
 	private List<Product> products = new ArrayList<>();
+	private BigDecimal productTotalPrice;
+	// private List<String> selectedProductDetails = new ArrayList<>();
+	private Map<String, String> selectedProductDetails = new HashMap<>();
 
 	public List<Product> getProducts() {
 		return products;
 	}
+
+	public BigDecimal getProductTotalPrice() {
+		return productTotalPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+
+	public Map<String, String> getSelectedProductDetails() {
+		return selectedProductDetails;
+	}
+
+	public void setSelectedProductDetails(Map<String, String> selectedProductDetails) {
+		this.selectedProductDetails = selectedProductDetails;
+	}
+
+	public void setProductTotalPrice(BigDecimal productTotalPrice) {
+		this.productTotalPrice = productTotalPrice;
+	}
+
+	// public List<String> getSelectedProductDetails() {
+	// return selectedProductDetails;
+	// }
+	//
+	// public void setSelectedProductDetails(List<String>
+	// selectedProductDetails) {
+	// this.selectedProductDetails = selectedProductDetails;
+	// }
 
 	public List<Product> addToCart(Product item) {
 		products.add(item);
@@ -25,30 +55,56 @@ public class ShoppingCart {
 			price = price.add(product.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
 		}
 
-		return price;
+		return price.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
-	public int getItemsCount(ShoppingCart shoppingCart, String productCode) {
+	public int getItemsCount(List<Product> products, String productCode) {
 		int count = 0;
-		for (Product product : shoppingCart.getProducts()) {
-			if (productCode.equals(product.getProductCode())) {
+		for (Product product : products) {
+			if (productCode != null && productCode.equals(product.getProductCode())) {
 				count = ++count;
 			}
 		}
 		return count;
 	}
 
-	public String itemDetails(ShoppingCart shoppingCart, String productCode) {
-		String itemDetails = null;
-		
-		for (Product product : shoppingCart.getProducts()) {
-			if (productCode != null && productCode.equals(product.getProductCode())) {
-				itemDetails = getItemsCount(shoppingCart, productCode) + " " + product.getProductName();
+	public Map<String, String> itemDetails(List<Product> products) {
+		Map<String, String> itemDetailsMap = new HashMap<>();
+
+		for (Product product : products) {
+
+			if (!itemDetailsMap.containsKey(product.getProductCode())) {
+				itemDetailsMap.put(product.getProductCode(),
+						getItemsCount(products, product.getProductCode()) + " " + product.getProductName());
 			}
 		}
-		
-		return itemDetails;
 
+		return itemDetailsMap;
+
+	}
+
+	public ShoppingCart shop(List<Product> products) {
+		ShoppingCart shoppingCart = new ShoppingCart();
+		String productSmallCode = "ult_small";
+
+		for (Product product : products) {
+			BigDecimal totalPrice = totalPrice(products);
+			if (getItemsCount(products, productSmallCode) == 3) {
+
+				shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice()));
+				break;
+			} else {
+				shoppingCart.setProductTotalPrice(totalPrice);
+				break;
+			}
+		}
+		;
+
+		Map<String, String> itemDetails = this.itemDetails(products);
+
+		shoppingCart.setSelectedProductDetails(itemDetails);
+
+		return shoppingCart;
 	}
 
 }
