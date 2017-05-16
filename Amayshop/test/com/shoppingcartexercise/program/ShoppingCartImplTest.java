@@ -16,6 +16,7 @@ public class ShoppingCartImplTest {
 	private Product productMedium;
 	private Product productLarge;
 	private Product productOneGb;
+	PricingRules pricingRules;
 
 	@Before
 	public void setUp() {
@@ -25,6 +26,7 @@ public class ShoppingCartImplTest {
 		productMedium = productBuilder("ult_medium", "Unlimited 2GB", new BigDecimal(29.90));
 		productLarge = productBuilder("ult_large", "Unlimited 5GB", new BigDecimal(44.90));
 		productOneGb = productBuilder("1gb", "1GB Data-pack", new BigDecimal(9.90));
+		pricingRules = new PricingRules();
 	}
 
 	@Test
@@ -37,6 +39,9 @@ public class ShoppingCartImplTest {
 		shoppingCart.addToCart(productLarge);
 
 		shoppingCart.setPromoCode(null);
+		
+		pricingRules.setSmallCountNumber(3);
+		shoppingCartImpl.setPricingRules(pricingRules);
 
 		ShoppingCart shopProduct = shoppingCartImpl.shop(shoppingCart);
 
@@ -61,6 +66,9 @@ public class ShoppingCartImplTest {
 		shoppingCart.addToCart(productLarge);
 
 		shoppingCart.setPromoCode(null);
+		
+		pricingRules.setLargeCountNumber(3);
+		shoppingCartImpl.setPricingRules(pricingRules);
 
 		ShoppingCart shopProduct = shoppingCartImpl.shop(shoppingCart);
 
@@ -124,4 +132,5 @@ public class ShoppingCartImplTest {
 
 		return item;
 	}
+	
 }
