@@ -42,12 +42,8 @@ public class ShoppingCart {
 		BigDecimal price = new BigDecimal(0);
 
 		for (Product product : products) {
-
-			if ("ult_large".equals(product.getProductCode())) {
-
-			}
-
-			price = price.add(product.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+			price = price.add(product.getPrice() != null ? product.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
+					: new BigDecimal(0));
 		}
 
 		return price.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -57,7 +53,7 @@ public class ShoppingCart {
 		int count = 0;
 		for (Product product : products) {
 			if (productCode != null && productCode.equals(product.getProductCode())) {
-				count = ++count;
+				++count;
 			}
 		}
 		return count;
@@ -81,9 +77,11 @@ public class ShoppingCart {
 	public ShoppingCart shop(List<Product> products) {
 		ShoppingCart shoppingCart = new ShoppingCart();
 		String productSmallCode = "ult_small";
+		String productMediumCode = "ult_medium";
 		String productLargeCode = "ult_large";
 		int smallItemsCount = getItemsCount(products, productSmallCode);
 		int largeItemsCount = getItemsCount(products, productLargeCode);
+		int mediumItemsCount = getItemsCount(products, productMediumCode);
 
 		for (Product product : products) {
 			if (smallItemsCount == 3) {
@@ -100,6 +98,11 @@ public class ShoppingCart {
 					shoppingCart.setProductTotalPrice(totalPrice(products));
 					break;
 				} else {
+					for (int i = 0; i < mediumItemsCount; i++) {
+						Product oneGbProduct = new Product("1gb", "1GB Data-pack", null);
+						products.add(oneGbProduct);
+					}
+
 					shoppingCart.setProductTotalPrice(totalPrice(products));
 					break;
 				}
