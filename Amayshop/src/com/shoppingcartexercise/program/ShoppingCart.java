@@ -107,11 +107,8 @@ public class ShoppingCart {
 				
 				BigDecimal grandTotalPrice = totalPrice(products);
 				
-				if (discount != null && promoCode.equals(discount)) {
-					BigDecimal discountedPrice = grandTotalPrice.multiply(new BigDecimal(.10));
-					
-					grandTotalPrice = grandTotalPrice.subtract(discountedPrice);
-				}
+				grandTotalPrice = applyDiscount(discount, promoCode, grandTotalPrice);
+				
 				shoppingCart.setProductTotalPrice(grandTotalPrice);
 				break;
 			}
@@ -122,5 +119,14 @@ public class ShoppingCart {
 		shoppingCart.setSelectedProductDetails(itemDetails);
 		
 		return shoppingCart;
+	}
+
+	private BigDecimal applyDiscount(String discount, String promoCode, BigDecimal grandTotalPrice) {
+		if (discount != null && promoCode.equals(discount)) {
+			BigDecimal discountedPrice = grandTotalPrice.multiply(new BigDecimal(.10));
+			
+			grandTotalPrice = grandTotalPrice.subtract(discountedPrice);
+		}
+		return grandTotalPrice;
 	}
 }
