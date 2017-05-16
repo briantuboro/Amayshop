@@ -10,7 +10,6 @@ public class ShoppingCart {
 
 	private List<Product> products = new ArrayList<>();
 	private BigDecimal productTotalPrice;
-	// private List<String> selectedProductDetails = new ArrayList<>();
 	private Map<String, String> selectedProductDetails = new HashMap<>();
 
 	public List<Product> getProducts() {
@@ -33,15 +32,6 @@ public class ShoppingCart {
 		this.productTotalPrice = productTotalPrice;
 	}
 
-	// public List<String> getSelectedProductDetails() {
-	// return selectedProductDetails;
-	// }
-	//
-	// public void setSelectedProductDetails(List<String>
-	// selectedProductDetails) {
-	// this.selectedProductDetails = selectedProductDetails;
-	// }
-
 	public List<Product> addToCart(Product item) {
 		products.add(item);
 
@@ -52,6 +42,11 @@ public class ShoppingCart {
 		BigDecimal price = new BigDecimal(0);
 
 		for (Product product : products) {
+
+			if ("ult_large".equals(product.getProductCode())) {
+
+			}
+
 			price = price.add(product.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
 		}
 
@@ -75,7 +70,7 @@ public class ShoppingCart {
 
 			if (!itemDetailsMap.containsKey(product.getProductCode())) {
 				itemDetailsMap.put(product.getProductCode(),
-						getItemsCount(products, product.getProductCode()) + " " + product.getProductName());
+						getItemsCount(products, product.getProductCode()) + " x " + product.getProductName());
 			}
 		}
 
@@ -86,19 +81,30 @@ public class ShoppingCart {
 	public ShoppingCart shop(List<Product> products) {
 		ShoppingCart shoppingCart = new ShoppingCart();
 		String productSmallCode = "ult_small";
+		String productLargeCode = "ult_large";
+		int smallItemsCount = getItemsCount(products, productSmallCode);
+		int largeItemsCount = getItemsCount(products, productLargeCode);
 
 		for (Product product : products) {
-			BigDecimal totalPrice = totalPrice(products);
-			if (getItemsCount(products, productSmallCode) == 3) {
-
+			if (smallItemsCount == 3) {
+				BigDecimal totalPrice = totalPrice(products);
 				shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice()));
 				break;
 			} else {
-				shoppingCart.setProductTotalPrice(totalPrice);
-				break;
+				if (largeItemsCount > 3) {
+					for (Product largeProduct : products) {
+						if (productLargeCode.equals(largeProduct.getProductCode())) {
+							largeProduct.setPrice(new BigDecimal(39.90));
+						}
+					}
+					shoppingCart.setProductTotalPrice(totalPrice(products));
+					break;
+				} else {
+					shoppingCart.setProductTotalPrice(totalPrice(products));
+					break;
+				}
 			}
 		}
-		;
 
 		Map<String, String> itemDetails = this.itemDetails(products);
 
