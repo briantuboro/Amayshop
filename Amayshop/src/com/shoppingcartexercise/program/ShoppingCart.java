@@ -16,10 +16,6 @@ public class ShoppingCart {
 		return products;
 	}
 
-	public BigDecimal getProductTotalPrice() {
-		return productTotalPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
-
 	public Map<String, String> getSelectedProductDetails() {
 		return selectedProductDetails;
 	}
@@ -28,6 +24,10 @@ public class ShoppingCart {
 		this.selectedProductDetails = selectedProductDetails;
 	}
 
+	public BigDecimal getProductTotalPrice() {
+		return productTotalPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
 	public void setProductTotalPrice(BigDecimal productTotalPrice) {
 		this.productTotalPrice = productTotalPrice;
 	}
@@ -43,7 +43,7 @@ public class ShoppingCart {
 
 		for (Product product : products) {
 			price = price.add(product.getPrice() != null ? product.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
-					: new BigDecimal(0));
+					: new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP));
 		}
 
 		return price.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -74,7 +74,7 @@ public class ShoppingCart {
 
 	}
 
-	public ShoppingCart shop(List<Product> products) {
+	public ShoppingCart shop(List<Product> products, String discount) {
 		ShoppingCart shoppingCart = new ShoppingCart();
 		String productSmallCode = "ult_small";
 		String productMediumCode = "ult_medium";
@@ -82,38 +82,45 @@ public class ShoppingCart {
 		int smallItemsCount = getItemsCount(products, productSmallCode);
 		int largeItemsCount = getItemsCount(products, productLargeCode);
 		int mediumItemsCount = getItemsCount(products, productMediumCode);
+		String productOneGbCode = "1gb";
+		String productOneGbName = "1GB Data-pack";
+		String promoCode = "|<3AMAYSIM";
 
 		for (Product product : products) {
 			if (smallItemsCount == 3) {
 				BigDecimal totalPrice = totalPrice(products);
 				shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice()));
 				break;
-			} else {
-				if (largeItemsCount > 3) {
-					for (Product largeProduct : products) {
-						if (productLargeCode.equals(largeProduct.getProductCode())) {
-							largeProduct.setPrice(new BigDecimal(39.90));
-						}
+			} else if (largeItemsCount > 3) {
+				for (Product largeProduct : products) {
+					if (productLargeCode.equals(largeProduct.getProductCode())) {
+						largeProduct.setPrice(new BigDecimal(39.90));
 					}
-					shoppingCart.setProductTotalPrice(totalPrice(products));
-					break;
-				} else {
-					for (int i = 0; i < mediumItemsCount; i++) {
-						Product oneGbProduct = new Product("1gb", "1GB Data-pack", null);
-						products.add(oneGbProduct);
-					}
-
-					shoppingCart.setProductTotalPrice(totalPrice(products));
-					break;
 				}
+				shoppingCart.setProductTotalPrice(totalPrice(products));
+				break;
+			} else {
+				for (int i = 0; i < mediumItemsCount; i++) {
+					Product oneGbProduct = new Product(productOneGbCode, productOneGbName, null);
+					products.add(oneGbProduct);
+				}
+				
+				BigDecimal grandTotalPrice = totalPrice(products);
+				
+				if (discount != null && promoCode.equals(discount)) {
+					BigDecimal discountedPrice = grandTotalPrice.multiply(new BigDecimal(.10));
+					
+					grandTotalPrice = grandTotalPrice.subtract(discountedPrice);
+				}
+				shoppingCart.setProductTotalPrice(grandTotalPrice);
+				break;
 			}
 		}
-
+		
 		Map<String, String> itemDetails = this.itemDetails(products);
-
+		
 		shoppingCart.setSelectedProductDetails(itemDetails);
-
+		
 		return shoppingCart;
 	}
-
 }
