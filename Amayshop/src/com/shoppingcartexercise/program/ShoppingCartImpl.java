@@ -5,15 +5,16 @@ import java.util.Map;
 
 public class ShoppingCartImpl implements Shopping {
 
+	private static String PRODUCT_SMALL_CODE = "ult_small";
+	private static String PRODUCT_MEDIUM_CODE = "ult_medium";
+	private static String PRODUCT_LARGE_CODE = "ult_large";
+	private static String PRODUCT_ONE_GB_CODE = "1gb";
+	private static String PRODUCT_ONE_GB_NAME = "1GB Data-pack";
+
 	public ShoppingCart shop(ShoppingCart shoppingCart) {
-		String productSmallCode = "ult_small";
-		String productMediumCode = "ult_medium";
-		String productLargeCode = "ult_large";
-		int smallItemsCount = shoppingCart.getItemsCount(shoppingCart.getProducts(), productSmallCode);
-		int largeItemsCount = shoppingCart.getItemsCount(shoppingCart.getProducts(), productLargeCode);
-		int mediumItemsCount = shoppingCart.getItemsCount(shoppingCart.getProducts(), productMediumCode);
-		String productOneGbCode = "1gb";
-		String productOneGbName = "1GB Data-pack";
+		int smallItemsCount = shoppingCart.getItemsCount(shoppingCart.getProducts(), PRODUCT_SMALL_CODE);
+		int largeItemsCount = shoppingCart.getItemsCount(shoppingCart.getProducts(), PRODUCT_LARGE_CODE);
+		int mediumItemsCount = shoppingCart.getItemsCount(shoppingCart.getProducts(), PRODUCT_MEDIUM_CODE);
 
 		for (Product product : shoppingCart.getProducts()) {
 			if (smallItemsCount == 3) {
@@ -22,7 +23,7 @@ public class ShoppingCartImpl implements Shopping {
 				break;
 			} else if (largeItemsCount > 3) {
 				for (Product largeProduct : shoppingCart.getProducts()) {
-					if (productLargeCode.equals(largeProduct.getProductCode())) {
+					if (PRODUCT_LARGE_CODE.equals(largeProduct.getProductCode())) {
 						largeProduct.setPrice(new BigDecimal(39.90));
 					}
 				}
@@ -30,7 +31,7 @@ public class ShoppingCartImpl implements Shopping {
 				break;
 			} else {
 				for (int i = 0; i < mediumItemsCount; i++) {
-					Product oneGbProduct = new Product(productOneGbCode, productOneGbName, null);
+					Product oneGbProduct = new Product(PRODUCT_ONE_GB_CODE, PRODUCT_ONE_GB_NAME, null);
 					shoppingCart.getProducts().add(oneGbProduct);
 				}
 				
