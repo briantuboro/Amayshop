@@ -14,7 +14,7 @@ After setting up the tools, please follow the instructions:
 2. Import Amayshop project to Eclipse. 
 3. Execute the unit test ShoppingCartImplTest and ShoppingCartTest.
 
-ShoppingCartImplTest - have the unit test for the four scenarios.
-ShoppingCartTest - have the unit test for the convenience methods.
+* ShoppingCartImplTest - have the unit test for the four scenarios.
+* ShoppingCartTest - have the unit test for the convenience methods.
 
 
