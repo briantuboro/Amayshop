@@ -21,14 +21,14 @@ public class ShoppingCartImpl implements Shopping {
 			if (pricingRules != null && pricingRules.getSmallCountNumber() != null) {
 				if (smallItemsCount == pricingRules.getSmallCountNumber()) {
 					BigDecimal totalPrice = shoppingCart.totalPrice(shoppingCart.getProducts());
-					shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice()));
+					shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice().getAmount()));
 					break;
 				}	
 			} else if (pricingRules != null && pricingRules.getLargeCountNumber() != null) {
 				if (largeItemsCount > pricingRules.getLargeCountNumber()) {
 					for (Product largeProduct : shoppingCart.getProducts()) {
 						if (PRODUCT_LARGE_CODE.equals(largeProduct.getProductCode())) {
-							largeProduct.setPrice(new BigDecimal(39.90));
+							largeProduct.getPrice().setAmount(pricingRules.getLargeProductDiscountAmount().getAmount());
 						}
 					}
 				shoppingCart.setProductTotalPrice(shoppingCart.totalPrice(shoppingCart.getProducts()));

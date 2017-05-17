@@ -1,18 +1,16 @@
 package com.shoppingcartexercise.program;
 
-import java.math.BigDecimal;
-
 public class Product {
 
 	private String productCode;
 	private String productName;
-	private BigDecimal price;
+	private MonetaryAmount price;
 
 	public Product() {
 
 	}
 
-	public Product(String productCode, String productname, BigDecimal price) {
+	public Product(String productCode, String productname, MonetaryAmount price) {
 		this.productCode = productCode;
 		this.productName = productname;
 		this.price = price;
@@ -34,11 +32,12 @@ public class Product {
 		this.productName = productName;
 	}
 
-	public BigDecimal getPrice() {
+	public MonetaryAmount getPrice() {
 		return price;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public void setPrice(MonetaryAmount price) {
 		this.price = price;
 	}
+
 }

@@ -51,8 +51,9 @@ public class ShoppingCart {
 		BigDecimal price = new BigDecimal(0);
 
 		for (Product product : products) {
-			price = price.add(product.getPrice() != null ? product.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP)
-					: new BigDecimal(0).setScale(2, BigDecimal.ROUND_HALF_UP));
+			if (product.getPrice() != null && product.getPrice().getAmount() != null) {
+				price = price.add(product.getPrice().getAmount().setScale(2, BigDecimal.ROUND_HALF_UP));
+			}
 		}
 
 		return price.setScale(2, BigDecimal.ROUND_HALF_UP);

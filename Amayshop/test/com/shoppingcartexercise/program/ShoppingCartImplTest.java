@@ -22,10 +22,10 @@ public class ShoppingCartImplTest {
 	public void setUp() {
 		shoppingCart = new ShoppingCart();
 		shoppingCartImpl = new ShoppingCartImpl();
-		productSmall = productBuilder("ult_small", "Unlimited 1GB", new BigDecimal(24.90));
-		productMedium = productBuilder("ult_medium", "Unlimited 2GB", new BigDecimal(29.90));
-		productLarge = productBuilder("ult_large", "Unlimited 5GB", new BigDecimal(44.90));
-		productOneGb = productBuilder("1gb", "1GB Data-pack", new BigDecimal(9.90));
+		productSmall = productBuilder("ult_small", "Unlimited 1GB", new MonetaryAmount(new BigDecimal(24.90), "USD"));
+		productMedium = productBuilder("ult_medium", "Unlimited 2GB", new MonetaryAmount(new BigDecimal(29.90), "USD"));
+		productLarge = productBuilder("ult_large", "Unlimited 5GB", new MonetaryAmount(new BigDecimal(44.90), "USD"));
+		productOneGb = productBuilder("1gb", "1GB Data-pack", new MonetaryAmount(new BigDecimal(9.90), "USD"));
 		pricingRules = new PricingRules();
 	}
 
@@ -68,6 +68,7 @@ public class ShoppingCartImplTest {
 		shoppingCart.setPromoCode(null);
 		
 		pricingRules.setLargeCountNumber(3);
+		pricingRules.setLargeProductDiscountAmount(new MonetaryAmount(new BigDecimal(39.90), "USD"));
 		shoppingCartImpl.setPricingRules(pricingRules);
 
 		ShoppingCart shopProduct = shoppingCartImpl.shop(shoppingCart);
@@ -123,7 +124,7 @@ public class ShoppingCartImplTest {
 		assertEquals("1 x 1GB Data-pack", shopProduct.getSelectedProductDetails().get("1gb"));
 	}
 
-	private Product productBuilder(String productCode, String productName, BigDecimal price) {
+	private Product productBuilder(String productCode, String productName, MonetaryAmount price) {
 		Product item = new Product();
 
 		item.setProductCode(productCode);
