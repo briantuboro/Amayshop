@@ -248,7 +248,7 @@ public class ShoppingCartImplTest {
 	}
 	
 	@Test
-	public void testWhenOneOrderForEachProductsWithoutPromo() {
+	public void testWhenSingleOrderForEachProductsWithoutPromo() {
 		// Add a small product to cart
 		shoppingCart.addToCart(productSmall);
 		// Add a medium product to cart
