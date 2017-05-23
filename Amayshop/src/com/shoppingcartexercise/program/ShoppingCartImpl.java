@@ -21,7 +21,9 @@ public class ShoppingCartImpl implements Shopping {
 			if (pricingRules != null && pricingRules.getSmallCountNumber() != null) {
 				if (smallItemsCount == pricingRules.getSmallCountNumber()) {
 					BigDecimal totalPrice = shoppingCart.totalPrice(shoppingCart.getProducts());
-					shoppingCart.setProductTotalPrice(totalPrice.subtract(product.getPrice().getAmount()));
+					BigDecimal smallProductPriceAppliedDeal = totalPrice.subtract(product.getPrice().getAmount());
+					BigDecimal grandTotalPrice = shoppingCart.applyDiscount(shoppingCart.getPromoCode(), smallProductPriceAppliedDeal);
+					shoppingCart.setProductTotalPrice(grandTotalPrice);
 					break;
 				}	
 			} else if (pricingRules != null && pricingRules.getLargeCountNumber() != null) {
