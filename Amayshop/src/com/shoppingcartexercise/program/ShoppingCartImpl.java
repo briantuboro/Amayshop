@@ -24,6 +24,7 @@ public class ShoppingCartImpl implements Shopping {
 					BigDecimal smallProductPriceAppliedDeal = totalPrice.subtract(product.getPrice().getAmount());
 					BigDecimal grandTotalPrice = shoppingCart.applyDiscount(shoppingCart.getPromoCode(), smallProductPriceAppliedDeal);
 					shoppingCart.setProductTotalPrice(grandTotalPrice);
+					addOneGbProductForEachMediumProduct(shoppingCart, mediumItemsCount);
 					break;
 				}	
 			} else if (pricingRules != null && pricingRules.getLargeCountNumber() != null) {
@@ -37,17 +38,15 @@ public class ShoppingCartImpl implements Shopping {
 				BigDecimal grandTotalPrice = computeGrandTotalPrice(shoppingCart);
 					
 				shoppingCart.setProductTotalPrice(grandTotalPrice);
+				addOneGbProductForEachMediumProduct(shoppingCart, mediumItemsCount);
 				break;
 				}
 			} else {
-				for (int i = 0; i < mediumItemsCount; i++) {
-					Product oneGbProduct = new Product(PRODUCT_ONE_GB_CODE, PRODUCT_ONE_GB_NAME, null);
-					shoppingCart.getProducts().add(oneGbProduct);
-				}
 				
 				BigDecimal grandTotalPrice = computeGrandTotalPrice(shoppingCart);
 				
 				shoppingCart.setProductTotalPrice(grandTotalPrice);
+				addOneGbProductForEachMediumProduct(shoppingCart, mediumItemsCount);
 				break;
 			}
 		}
@@ -57,6 +56,13 @@ public class ShoppingCartImpl implements Shopping {
 		shoppingCart.setSelectedProductDetails(itemDetails);
 		
 		return shoppingCart;
+	}
+
+	private void addOneGbProductForEachMediumProduct(ShoppingCart shoppingCart, int mediumItemsCount) {
+		for (int i = 0; i < mediumItemsCount; i++) {
+			Product oneGbProduct = new Product(PRODUCT_ONE_GB_CODE, PRODUCT_ONE_GB_NAME, null);
+			shoppingCart.getProducts().add(oneGbProduct);
+		}
 	}
 
 	private BigDecimal computeGrandTotalPrice(ShoppingCart shoppingCart) {
