@@ -31,7 +31,10 @@ public class ShoppingCartImpl implements Shopping {
 							largeProduct.getPrice().setAmount(pricingRules.getLargeProductDiscountAmount().getAmount());
 						}
 					}
-				shoppingCart.setProductTotalPrice(shoppingCart.totalPrice(shoppingCart.getProducts()));
+				
+				BigDecimal grandTotalPrice = computeGrandTotalPrice(shoppingCart);
+					
+				shoppingCart.setProductTotalPrice(grandTotalPrice);
 				break;
 				}
 			} else {
@@ -40,9 +43,7 @@ public class ShoppingCartImpl implements Shopping {
 					shoppingCart.getProducts().add(oneGbProduct);
 				}
 				
-				BigDecimal grandTotalPrice = shoppingCart.totalPrice(shoppingCart.getProducts());
-				
-				grandTotalPrice = shoppingCart.applyDiscount(shoppingCart.getPromoCode(), grandTotalPrice);
+				BigDecimal grandTotalPrice = computeGrandTotalPrice(shoppingCart);
 				
 				shoppingCart.setProductTotalPrice(grandTotalPrice);
 				break;
@@ -54,6 +55,13 @@ public class ShoppingCartImpl implements Shopping {
 		shoppingCart.setSelectedProductDetails(itemDetails);
 		
 		return shoppingCart;
+	}
+
+	private BigDecimal computeGrandTotalPrice(ShoppingCart shoppingCart) {
+		BigDecimal grandTotalPrice = shoppingCart.totalPrice(shoppingCart.getProducts());
+		
+		grandTotalPrice = shoppingCart.applyDiscount(shoppingCart.getPromoCode(), grandTotalPrice);
+		return grandTotalPrice;
 	}
 
 	public PricingRules getPricingRules() {
