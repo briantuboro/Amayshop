@@ -10,6 +10,12 @@ import org.junit.Test;
 
 public class ShoppingCartImplTest {
 
+	private static final String PROMO_CODE = "|<3AMAYSIM";
+	private static final String USD = "USD";
+	private static final String _1GB = "1gb";
+	private static final String ULT_LARGE = "ult_large";
+	private static final String ULT_MEDIUM = "ult_medium";
+	private static final String ULT_SMALL = "ult_small";
 	private ShoppingCart shoppingCart;
 	private ShoppingCartImpl shoppingCartImpl;
 	private Product productSmall;
@@ -22,10 +28,10 @@ public class ShoppingCartImplTest {
 	public void setUp() {
 		shoppingCart = new ShoppingCart();
 		shoppingCartImpl = new ShoppingCartImpl();
-		productSmall = productBuilder("ult_small", "Unlimited 1GB", new MonetaryAmount(new BigDecimal(24.90), "USD"));
-		productMedium = productBuilder("ult_medium", "Unlimited 2GB", new MonetaryAmount(new BigDecimal(29.90), "USD"));
-		productLarge = productBuilder("ult_large", "Unlimited 5GB", new MonetaryAmount(new BigDecimal(44.90), "USD"));
-		productOneGb = productBuilder("1gb", "1GB Data-pack", new MonetaryAmount(new BigDecimal(9.90), "USD"));
+		productSmall = productBuilder(ULT_SMALL, "Unlimited 1GB", new MonetaryAmount(new BigDecimal(24.90), USD));
+		productMedium = productBuilder(ULT_MEDIUM, "Unlimited 2GB", new MonetaryAmount(new BigDecimal(29.90), USD));
+		productLarge = productBuilder(ULT_LARGE, "Unlimited 5GB", new MonetaryAmount(new BigDecimal(44.90), USD));
+		productOneGb = productBuilder(_1GB, "1GB Data-pack", new MonetaryAmount(new BigDecimal(9.90), USD));
 		pricingRules = new PricingRules();
 	}
 
@@ -50,8 +56,8 @@ public class ShoppingCartImplTest {
 
 		// Expected cart items
 		assertFalse(shopProduct.getSelectedProductDetails().isEmpty());
-		assertEquals("3 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get("ult_small"));
-		assertEquals("1 x Unlimited 5GB", shopProduct.getSelectedProductDetails().get("ult_large"));
+		assertEquals("3 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get(ULT_SMALL));
+		assertEquals("1 x Unlimited 5GB", shopProduct.getSelectedProductDetails().get(ULT_LARGE));
 	}
 
 	@Test
@@ -68,7 +74,7 @@ public class ShoppingCartImplTest {
 		shoppingCart.setPromoCode(null);
 		
 		pricingRules.setLargeCountNumber(3);
-		pricingRules.setLargeProductDiscountAmount(new MonetaryAmount(new BigDecimal(39.90), "USD"));
+		pricingRules.setLargeProductDiscountAmount(new MonetaryAmount(new BigDecimal(39.90), USD));
 		shoppingCartImpl.setPricingRules(pricingRules);
 
 		ShoppingCart shopProduct = shoppingCartImpl.shop(shoppingCart);
@@ -78,8 +84,8 @@ public class ShoppingCartImplTest {
 
 		// Expected cart items
 		assertFalse(shopProduct.getSelectedProductDetails().isEmpty());
-		assertEquals("2 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get("ult_small"));
-		assertEquals("4 x Unlimited 5GB", shopProduct.getSelectedProductDetails().get("ult_large"));
+		assertEquals("2 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get(ULT_SMALL));
+		assertEquals("4 x Unlimited 5GB", shopProduct.getSelectedProductDetails().get(ULT_LARGE));
 	}
 
 	@Test
@@ -99,9 +105,9 @@ public class ShoppingCartImplTest {
 
 		// Expected cart items
 		assertFalse(shopProduct.getSelectedProductDetails().isEmpty());
-		assertEquals("1 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get("ult_small"));
-		assertEquals("2 x Unlimited 2GB", shopProduct.getSelectedProductDetails().get("ult_medium"));
-		assertEquals("2 x 1GB Data-pack", shopProduct.getSelectedProductDetails().get("1gb"));
+		assertEquals("1 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get(ULT_SMALL));
+		assertEquals("2 x Unlimited 2GB", shopProduct.getSelectedProductDetails().get(ULT_MEDIUM));
+		assertEquals("2 x 1GB Data-pack", shopProduct.getSelectedProductDetails().get(_1GB));
 	}
 
 	@Test
@@ -111,7 +117,7 @@ public class ShoppingCartImplTest {
 		// Add a 1gb product to cart
 		shoppingCart.addToCart(productOneGb);
 
-		shoppingCart.setPromoCode("|<3AMAYSIM");
+		shoppingCart.setPromoCode(PROMO_CODE);
 
 		ShoppingCart shopProduct = shoppingCartImpl.shop(shoppingCart);
 
@@ -120,8 +126,8 @@ public class ShoppingCartImplTest {
 
 		// Expected cart items
 		assertFalse(shopProduct.getSelectedProductDetails().isEmpty());
-		assertEquals("1 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get("ult_small"));
-		assertEquals("1 x 1GB Data-pack", shopProduct.getSelectedProductDetails().get("1gb"));
+		assertEquals("1 x Unlimited 1GB", shopProduct.getSelectedProductDetails().get(ULT_SMALL));
+		assertEquals("1 x 1GB Data-pack", shopProduct.getSelectedProductDetails().get(_1GB));
 	}
 
 	private Product productBuilder(String productCode, String productName, MonetaryAmount price) {
