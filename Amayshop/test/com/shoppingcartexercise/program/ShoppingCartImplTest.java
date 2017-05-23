@@ -158,6 +158,35 @@ public class ShoppingCartImplTest {
 		assertEquals("2 x Unlimited 2GB", shopProduct.getSelectedProductDetails().get(ULT_MEDIUM));
 		
 	}
+	
+	@Test
+	public void testWhen4xUnlimited5GbAnd2xUnlimited2GbWithOutPromoApplied() {
+		// Add two large product to cart
+		shoppingCart.addToCart(productLarge);
+		shoppingCart.addToCart(productLarge);
+		shoppingCart.addToCart(productLarge);
+		shoppingCart.addToCart(productLarge);
+		// Add two medium product to cart
+		shoppingCart.addToCart(productMedium);
+		shoppingCart.addToCart(productMedium);
+		
+		shoppingCart.setPromoCode(null);
+		
+		pricingRules.setLargeCountNumber(3);
+		pricingRules.setLargeProductDiscountAmount(new MonetaryAmount(new BigDecimal(39.90), USD));
+		shoppingCartImpl.setPricingRules(pricingRules);
+
+		ShoppingCart shopProduct = shoppingCartImpl.shop(shoppingCart);
+		
+		// Expected cart total price
+		assertEquals(new BigDecimal(219.40).setScale(2, BigDecimal.ROUND_HALF_UP), shopProduct.getProductTotalPrice());
+		
+		// Expected cart items
+		assertFalse(shopProduct.getSelectedProductDetails().isEmpty());
+		assertEquals("4 x Unlimited 5GB", shopProduct.getSelectedProductDetails().get(ULT_LARGE));
+		assertEquals("2 x Unlimited 2GB", shopProduct.getSelectedProductDetails().get(ULT_MEDIUM));
+		
+	}
 
 	private Product productBuilder(String productCode, String productName, MonetaryAmount price) {
 		Product item = new Product();
