@@ -30,7 +30,7 @@ public class ShoppingCartImplTest {
 	}
 
 	@Test
-	public void testShopOfFirstScenario() {
+	public void testFirsScenarioWhen3xUnlimited1GbAnd1xUnlimitedGb() {
 		// Add three small product to cart
 		shoppingCart.addToCart(productSmall);
 		shoppingCart.addToCart(productSmall);
@@ -55,7 +55,7 @@ public class ShoppingCartImplTest {
 	}
 
 	@Test
-	public void testShopOfSecondScenario() {
+	public void testSecondScenarioWhen2xUnlimited1GbAnd4xUnlimited5Gb() {
 		// Add two small product to cart
 		shoppingCart.addToCart(productSmall);
 		shoppingCart.addToCart(productSmall);
@@ -83,7 +83,7 @@ public class ShoppingCartImplTest {
 	}
 
 	@Test
-	public void testShopOfThirdScenario() {
+	public void testThirdScenarioWhen2xUnlimited1GbAnd4xUnlimited5Gb() {
 		// Add a small product to cart
 		shoppingCart.addToCart(productSmall);
 		// Add two medium product to cart
@@ -105,7 +105,7 @@ public class ShoppingCartImplTest {
 	}
 
 	@Test
-	public void testShopOfFourthScenario() {
+	public void testFourthScenarioWhen1xUnimitedOneGbAnd1x1GbDataPackWithPromoApplied() {
 		// Add a small product to cart
 		shoppingCart.addToCart(productSmall);
 		// Add a 1gb product to cart
